@@ -7,6 +7,6 @@ Route::get('/ipayos/config', function () {
         'client_id' => config('ipayos.client_id'),
         'token'     => substr(config('ipayos.token'), 0, 10) . '...',
         'secret'    => substr(config('ipayos.secret'), 0, 10) . '...',
-        'endpoint'  => config('ipayos.endpoint'),
+        'endpoint'  => config('ipayos.apiendpoint'),
     ]);
 });
