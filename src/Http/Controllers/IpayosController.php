@@ -38,6 +38,11 @@ class IpayosController extends Controller
 
         $response = $this->ipayos->nccComplete($request->get('requestId'));
 
-        return response()->json($response);
+       // return response()->json($response);
+        return redirect()->route('ipayos.form')
+        ->with([
+            'message' => $response['message'] ?? 'Completed',
+            'status' => $response['status'] ?? 'success',
+        ]);
     }
 }
