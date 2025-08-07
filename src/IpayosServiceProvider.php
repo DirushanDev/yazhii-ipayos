@@ -8,8 +8,10 @@ class IpayosServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        // Merge the config file
         $this->mergeConfigFrom(__DIR__ . '/../config/ipayos.php', 'ipayos');
 
+        // Register the service
         $this->app->singleton('ipayos', function () {
             return new IpayosService();
         });
@@ -17,12 +19,13 @@ class IpayosServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // Publish config
+        // Publish the config file
         $this->publishes([
             __DIR__ . '/../config/ipayos.php' => config_path('ipayos.php'),
         ], 'ipayos-config');
 
-        // Load route
+        // Load routes, views, and translations
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'ipayos');
     }
 }
