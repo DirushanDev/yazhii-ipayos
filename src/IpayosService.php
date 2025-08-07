@@ -1,21 +1,40 @@
 <?php
-
+// app/Services/IpayosService.php
 namespace Yazhii\Ipayos;
 
-use Illuminate\Support\Facades\Http;
+use Yazhii\Ipayos\Traits\HasRestClient;
 
 class IpayosService
 {
-    public function send(array $data): array
+    use HasRestClient;
+
+    public function nccRequest(array $data): array
     {
-        $jsonRequest = array_merge($data, [
+        $jsonRequest = [
             'clientId' => config('ipayos.client_id'),
-            'token'    => config('ipayos.token'),
-            'secret'   => config('ipayos.secret'),
-        ]);
+            'token' => config('ipayos.token'),
+            'secret' => config('ipayos.secret'),
+            'requestType' => 'NCC_INIT',
+            'transactionAmount' => $data['amount'],
+            'msisdn' => $data['mobileNumber'],
+            'email' => $data['email'],
+            'clientReference' => 'test001',
+            'redirectUrl' => route('ipayos.complete'),
+        ];
 
-        $response = Http::post(config('ipayos.endpoint'), $jsonRequest);
+        return $this->sendRestRequest(config('ipayos.apiendpoint'), $jsonRequest);
+    }
 
-        return $response->json();
+    public function nccComplete(string $requestId): array
+    {
+        $jsonRequest = [
+            'clientId' => config('ipayos.client_id'),
+            'token' => config('ipayos.token'),
+            'secret' => config('ipayos.secret'),
+            'requestType' => 'NCC_COMPLETE',
+            'requestId' => $requestId,
+        ];
+
+        return $this->sendRestRequest(config('ipayos.apiendpoint'), $jsonRequest);
     }
 }

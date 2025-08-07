@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Yazhii\Ipayos\Http\Controllers\IpayosController;
 Route::get('/ipayos/config', function () {
     return response()->json([
         'client_id' => config('ipayos.client_id'),
@@ -10,3 +10,9 @@ Route::get('/ipayos/config', function () {
         'endpoint'  => config('ipayos.apiendpoint'),
     ]);
 });
+
+Route::get('/ipayos', function () {
+    return view('ipayos.index');
+})->name('ipayos.form');
+Route::post('/ipayos/init', [IpayosController::class, 'nccInitRedirect'])->name('ipayos.init');
+Route::get('/ipayos/complete', [IpayosController::class, 'nccInitComplete'])->name('ipayos.complete');
