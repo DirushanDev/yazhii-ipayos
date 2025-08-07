@@ -16,7 +16,7 @@
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Payment Details</h2>
 
         {{-- Flash or inline message --}}
-        @if (session('message'))
+@if (session('message'))
     <div class="mb-4 p-3 rounded-md 
         @if(session('status') === 'error') bg-red-100 text-red-800
         @elseif(session('status') === 'success') bg-green-100 text-green-800
@@ -24,6 +24,7 @@
         {{ session('message') }}
     </div>
 @endif
+
         @if (!empty($message))
             <div class="mb-4 p-3 rounded-md 
                 @if($status === 'error') bg-red-100 text-red-800
