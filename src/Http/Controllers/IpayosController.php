@@ -6,7 +6,7 @@ namespace Yazhii\Ipayos\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Yazhii\Ipayos\IpayosService;
-
+use Illuminate\Support\Facades\Log;
 class IpayosController extends Controller
 {
     protected $ipayos;
@@ -37,7 +37,16 @@ class IpayosController extends Controller
         }
 
         $response = $this->ipayos->nccComplete($request->get('requestId'));
+       
+       // return response()->json($response);
+        $data = is_string($response) ? json_decode($response, true) : $response;
 
-        return response()->json($response);
+    return view('ipayos::response', [
+        'status' => $data['status'] ?? null,
+        'statusDescription' => $data['statusDescription'] ?? null,
+        'nccReference' => $data['data']['nccReference'] ?? null,
+        'responseText' => $data['data']['responseText'] ?? null,
+        'vibes' => $data['data']['vibes'] ?? null,
+    ]);
     }
 }
